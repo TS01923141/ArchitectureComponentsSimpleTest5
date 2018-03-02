@@ -20,6 +20,8 @@ import javax.inject.Inject;
 
 import io.reactivex.Completable;
 import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
+import io.realm.RealmObject;
 import io.realm.RealmResults;
 
 /**
@@ -27,7 +29,7 @@ import io.realm.RealmResults;
  */
 
 public class UserViewModel extends ViewModel {
-//    private final UserDao mDao;
+    //    private final UserDao mDao;
 //    @Inject
     UserDao mDao;
     private boolean databaseIsEmpty = true;
@@ -44,22 +46,32 @@ public class UserViewModel extends ViewModel {
         }else {
             updateUserList();
         }
-
+//        this.mDao.searchAll()
+//                .subscribe(new Consumer<RealmResults<User>>() {
+//                    @Override
+//                    public void accept(RealmResults<User> realmResults) throws Exception {
+//                        if (realmResults.size() == 0) {
+//                            updateUserName("").subscribe();
+//                        } else {
+//                            updateUserList();
+//                        }
+//                    }
+//                });
     }
 
-    public LiveData<List<User>> getUserList(){
+    public LiveData<List<User>> getUserList() {
         return userList;
     }
 
-    public Completable updateUserName(final String userName){
+    public Completable updateUserName(final String userName) {
         return Completable.fromAction(new Action() {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void run() throws Exception {
-                if (Objects.equals(databaseIsEmpty, true)){
+                if (Objects.equals(databaseIsEmpty, true)) {
                     mDao.insert("0", userName);
                     databaseIsEmpty = false;
-                }else {
+                } else {
                     mDao.update("0", userName);
                 }
                 updateUserList();
@@ -67,7 +79,7 @@ public class UserViewModel extends ViewModel {
         });
     }
 
-    private void updateUserList(){
+    private void updateUserList() {
         RealmResultLiveData<User> userRealmList = new RealmResultLiveData<>(mDao.searchAll());
         userList = Transformations.map(userRealmList, new Function<RealmResults<User>, List<User>>() {
             @Override
@@ -78,5 +90,21 @@ public class UserViewModel extends ViewModel {
                 return userList;
             }
         });
+//        mDao.searchAll()
+//                .subscribe(new Consumer<RealmResults<User>>() {
+//                    @Override
+//                    public void accept(RealmResults<User> realmResults) throws Exception {
+//                        RealmResultLiveData<User> realmResultLiveData = new RealmResultLiveData<>(realmResults);
+//                        userList = Transformations.map(realmResultLiveData, new Function<RealmResults<User>, List<User>>() {
+//                            @Override
+//                            public List<User> apply(RealmResults<User> users) {
+//                                List<User> userList = new ArrayList<>();
+//                                userList.addAll(users);
+//
+//                                return userList;
+//                            }
+//                        });
+//                    }
+//                });
     }
 }

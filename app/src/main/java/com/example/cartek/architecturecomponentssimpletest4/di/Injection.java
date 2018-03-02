@@ -17,4 +17,8 @@ public class Injection {
         UserDao dao = new UserDao(database);
         return dao;
     }
+//    public static UserDao provideUserDatabase(){
+//        UserDao dao = new UserDao();
+//        return dao;
+//    }
 }

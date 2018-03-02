@@ -16,13 +16,22 @@ import io.realm.Realm;
 @Module(includes = ViewModelModule.class)
 public class UserApplicationModule {
     private static final String TAG = "UserApplicationModule";
+
     @Provides
     @Singleton
-    UserDao provideUserDao(Realm database){
+    UserDao provideUserDao(Realm database) {
         Log.e(TAG, "provideUserDao");
         UserDao dao = new UserDao(database);
         return dao;
     }
+//    @Provides
+//    @Singleton
+//    UserDao provideUserDao() {
+//        Log.e(TAG, "provideUserDao");
+////        UserDao dao = new UserDao(database);
+////        return dao;
+//        return new UserDao();
+//    }
 
     @Provides
     @Singleton
